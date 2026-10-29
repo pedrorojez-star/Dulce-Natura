@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!-- Tienda generada con Harvys, asistente de e-commerce creado por el Profesor Harvey Sanabria -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dulce Natura — Una pausa natural para ti.</title>
+<meta name="description" content="Almohadas terapéuticas rellenas de hierbas y semillas para acompañar tus momentos de bienestar.">
+<meta name="generator" content="Harvys — asistente de e-commerce del Profesor Harvey Sanabria">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="anim-media tarj-borde modo-claro">
+
+<!-- MODAL PAGO -->
+<div class="modal-overlay" id="modal-pago" onclick="modalClickFuera(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head"><h3>Confirmar pago</h3><button class="modal-cerrar" onclick="cerrarModal()" aria-label="Cerrar">✕</button></div>
+    <div class="modal-body">
+      <div class="modal-total"><span class="tl">Total a pagar</span><span class="tm" id="modal-total-monto">$0</span></div>
+      <div class="pago-metodos" id="pago-metodos"></div>
+      <div class="pago-datos" id="pago-datos">
+        <div class="pd-label">Transferir a este número</div>
+        <div class="pd-numero" id="pd-numero"></div>
+        <div class="pd-nombre" id="pd-nombre"></div>
+        <button class="btn-copiar" onclick="copiarNumero()">📋 Copiar número</button>
+      </div>
+      <div class="pasos">
+        <div class="paso"><div class="paso-num">1</div><div class="paso-txt" id="paso-1"></div></div>
+        <div class="paso"><div class="paso-num">2</div><div class="paso-txt">Toca <strong>"Confirmar y enviar"</strong> — se abre WhatsApp con tu pedido</div></div>
+        <div class="paso"><div class="paso-num">3</div><div class="paso-txt" id="paso-3"></div></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <a href="#" target="_blank" rel="noopener" class="btn-wsp" onclick="return prepararWsp(this)">✅ Confirmar y enviar por WhatsApp</a>
+      <button class="btn-seguir" onclick="cerrarModal()">← Seguir comprando</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="cerrarCarrito()"></div>
+
+<!-- VISOR DE FOTOS -->
+<div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Foto del producto">
+  <figure class="visor-caja">
+    <button class="visor-cerrar" aria-label="Cerrar">✕</button>
+    <div class="visor-foto" id="visor-foto"><img id="visor-img" alt=""></div>
+    <figcaption><strong id="visor-nombre"></strong><span id="visor-precio"></span></figcaption>
+    <div class="visor-ayuda">Toca o haz clic en la foto para ampliarla más</div>
+  </figure>
+</div>
+
+<button class="carrito-fab" onclick="toggleCarrito()" id="fab" aria-label="Abrir carrito">🛒<span class="carrito-badge" id="badge">0</span></button>
+
+<div class="carrito-panel" id="panel-carrito">
+  <div class="panel-header"><h3>Tu selección de bienestar</h3><button class="btn-cerrar" onclick="cerrarCarrito()" aria-label="Cerrar carrito">✕</button></div>
+  <ul id="lista-carrito"></ul>
+  <div class="panel-footer">
+    <div class="total-row"><span class="total-lbl">Total</span><span class="total-monto" id="total">$0</span></div>
+    <div class="panel-btns"><button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar</button><button class="btn-pagar" onclick="pagar()">Consultar pedido por WhatsApp</button></div>
+  </div>
+</div>
+
+<!-- ASISTENTE DE LA TIENDA (responde con los datos de esta tienda) -->
+<span class="as-aviso" id="as-aviso">¿Te ayudo? 👋</span>
+<button class="as-burbuja" id="as-burbuja" aria-label="Abrir el asistente de la tienda"><svg class="as-robot" viewBox="0 0 64 64" aria-hidden="true">
+      <line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle class="as-antena" cx="32" cy="5" r="4" fill="currentColor"/>
+      <rect x="4" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="54" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="10" y="14" width="44" height="38" rx="15" fill="currentColor"/>
+      <rect x="16" y="21" width="32" height="20" rx="10" fill="var(--as-cara)"/>
+      <circle class="as-ojo" cx="25" cy="31" r="4" fill="currentColor"/>
+      <circle class="as-ojo" cx="39" cy="31" r="4" fill="currentColor"/>
+      <path d="M26 45q6 4 12 0" stroke="var(--as-cara)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg></button>
+<div class="as-panel" id="as-panel" role="dialog" aria-label="Natura">
+  <div class="as-cabecera">
+    <div class="as-avatar"><svg class="as-robot" viewBox="0 0 64 64" aria-hidden="true">
+      <line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle class="as-antena" cx="32" cy="5" r="4" fill="currentColor"/>
+      <rect x="4" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="54" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="10" y="14" width="44" height="38" rx="15" fill="currentColor"/>
+      <rect x="16" y="21" width="32" height="20" rx="10" fill="var(--as-cara)"/>
+      <circle class="as-ojo" cx="25" cy="31" r="4" fill="currentColor"/>
+      <circle class="as-ojo" cx="39" cy="31" r="4" fill="currentColor"/>
+      <path d="M26 45q6 4 12 0" stroke="var(--as-cara)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg></div>
+    <div><strong>Natura</strong><small><i></i> En línea</small></div>
+    <button id="as-cerrar" aria-label="Cerrar el asistente">✕</button>
+  </div>
+  <div class="as-mensajes" id="as-mensajes"></div>
+  <div class="as-chips" id="as-chips"></div>
+  <form class="as-form" id="as-form">
+    <input id="as-input" placeholder="Escribe tu pregunta…" autocomplete="off" aria-label="Tu pregunta">
+    <button type="submit" aria-label="Enviar"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
+  </form>
+</div>
+
+<header class="hero hero-compacto">
+  <div class="hero-bg efecto-ninguno"></div>
+  <div class="hero-content">
+    <div>
+      
+      <div class="hero-badge">Hierbas, semillas y bienestar</div>
+      <h1>Dulce Natura<span>Una pausa natural para ti</span></h1>
+      <p class="hero-sub">Almohadas terapéuticas rellenas de hierbas y semillas. Descubre una forma de acompañar tus momentos de descanso.</p>
+      <a href="#catalogo" class="btn-hero">Explorar almohadas
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <div class="hero-stats"><div class="hero-stat"><div class="num">10</div><div class="lbl">Almohadas para descubrir</div></div><div class="hero-stat"><div class="num">Bogotá</div><div class="lbl">Nuestra ciudad</div></div><div class="hero-stat"><div class="num">Colombia</div><div class="lbl">Envíos nacionales</div></div></div>
+    </div>
+    </div>
+  <div class="hero-scroll"><div></div></div>
+</header>
+
+<section class="banner-sec">
+  <div class="banner-glow"></div>
+  <div class="banner-content">
+    <div class="sec-label">Bienestar a tu ritmo</div>
+    <h2>Pequeñas pausas, <em>inspiración natural</em></h2>
+    <p>Conoce nuestras almohadas con hierbas y semillas, telas de alta calidad y opciones de personalización según tu necesidad. Consulta por WhatsApp los detalles de cada producto.</p>
+    <div class="banner-chips"><span class="chip">Hierbas y semillas</span><span class="chip">Personalización</span><span class="chip">Envíos nacionales</span><span class="chip">Entrega estimada: 1 a 3 días</span></div>
+  </div>
+</section>
+
+<div class="filtros-wrap" id="filtros-bar">
+  <div class="busqueda-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
+    <input type="text" id="buscador" placeholder="Buscar producto..." oninput="filtrarBusqueda()">
+  </div>
+</div>
+<section class="catalogo-wrap" id="catalogo">
+  <div class="catalogo-header">
+    <div><div class="sec-label">Encuentra tu almohada</div><div class="sec-title">Nuestra colección de bienestar</div></div>
+    <div class="catalogo-count" id="cont-count"></div>
+  </div>
+  <div id="productos"></div>
+</section>
+
+<section class="beneficios-sec" id="beneficios">
+  <div class="sec-centro"><div class="sec-label">El cuidado está en los detalles</div><div class="sec-title">Por qué elegir Dulce Natura</div></div>
+  <div class="beneficios-grid">
+    <div class="bcard"><div class="bcard-icono">🌿</div><h3>Calidad en cada detalle</h3><p>Almohadas elaboradas con telas y semillas de alta calidad.</p></div><div class="bcard"><div class="bcard-icono">🧵</div><h3>Personalización para ti</h3><p>Consulta opciones de personalización según tu necesidad de bienestar.</p></div><div class="bcard"><div class="bcard-icono">📦</div><h3>Llegamos a Colombia</h3><p>Envíos nacionales con tiempo aproximado de entrega de 1 a 3 días. Consulta el costo según tu destino.</p></div><div class="bcard"><div class="bcard-icono">🤝</div><h3>Productos con garantía</h3><p>Consulta por WhatsApp las condiciones y la cobertura de la garantía.</p></div>
+  </div>
+</section>
+
+<section class="recs-sec">
+  <div class="sec-label">Explora la colección</div>
+  <div class="sec-title">Ideas para tu pausa natural</div>
+  <div class="recs-grid" id="recomendados"></div>
+</section>
+
+<section class="top-sec">
+  <div class="sec-label">Las favoritas de la comunidad</div>
+  <div class="sec-title">Almohadas más votadas</div>
+  <div class="top-grid" id="top"></div>
+</section>
+
+<section class="duelo-sec">
+  <div class="sec-label">Elige tu favorita</div>
+  <div class="sec-title">¿Cuál va contigo?</div>
+  <div class="duelo-arena" id="duelo"></div>
+  <p class="duelo-info">Toca la almohada que prefieras para sumar tu voto. Este ranking refleja preferencias, no recomendaciones terapéuticas.</p>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-marca"><h3>Dulce Natura</h3><p>Dulce Natura · Almohadas terapéuticas con hierbas y semillas. Desde Bogotá, con envíos a todo Colombia. Red informada: DULCENATURA.CO (plataforma por confirmar). Horarios: [POR COMPLETAR].</p></div>
+    <div class="footer-col"><h4>Contacto</h4><ul><li><a href="https://wa.me/573025499922" target="_blank" rel="noopener">WhatsApp: +57 3025499922</a></li><li>📍 Bogotá</li></ul></div>
+    <div class="footer-col"><h4>Pagos</h4><ul><li>Tarjeta de crédito o débito</li><li>Addi</li><li>Bre-B</li></ul></div>
+    <div class="footer-col"><h4>Categorías</h4><ul><li>Bienestar</li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Dulce Natura — Todos los derechos reservados</span>
+    <span>Una pausa natural para ti.</span>
+  </div>
+  <div class="footer-credito">
+    Creada con <strong>Harvys</strong> · Prof. Harvey Sanabria ·
+    <a href="https://wa.me/573103323843?text=Hola%20Profesor%20Harvey%2C%20vi%20una%20tienda%20creada%20con%20Harvys%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener">WhatsApp 310 332 3843</a>
+  </div>
+</footer>
+
+<!-- Copia del proyecto para volver a abrirlo en Harvys (botón "Abrir"). No la borres. -->
+<script type="application/json" id="harvys-proyecto">{"negocio":{"nombre":"Dulce Natura","descripcion":"Almohadas terapéuticas rellenas de hierbas y semillas para acompañar tus momentos de bienestar.","eslogan":"Una pausa natural para ti.","ciudad":"Bogotá","cobertura":"Envíos a todo Colombia. Tiempo aproximado de entrega: 1 a 3 días. Costo de envío por confirmar según destino.","whatsapp":"573025499922","instagram":"","facebook":"","tiktok":"","horarios":[],"logo":""},"tema":{"nombreEstilo":"Botánica esencial","modo":"claro","colores":{"primario":"#365D4B","textoSobrePrimario":"#FFFFFF","fondo":"#FFFFFF","fondoAlterno":"#EDF4E8","tarjeta":"#FFFFFF","texto":"#213D30","textoSuave":"#526457","acento":"#D8CCB4"},"fuentes":{"titulos":"Space Grotesk","cuerpo":"DM Sans"},"titulosMayusculas":false,"radio":12,"animaciones":"media","fondoEfecto":"ninguno","hero":"compacto","tarjetas":"borde"},"textos":{"heroEtiqueta":"Hierbas, semillas y bienestar","heroTitulo":"Dulce Natura","heroTituloResaltado":"Una pausa natural para ti","heroSubtitulo":"Almohadas terapéuticas rellenas de hierbas y semillas. Descubre una forma de acompañar tus momentos de descanso.","heroBoton":"Explorar almohadas","heroImagen":"","estadisticas":[{"valor":"{productos}","etiqueta":"Almohadas para descubrir"},{"valor":"Bogotá","etiqueta":"Nuestra ciudad"},{"valor":"Colombia","etiqueta":"Envíos nacionales"}],"bannerEtiqueta":"Bienestar a tu ritmo","bannerTitulo":"Pequeñas pausas,","bannerTituloResaltado":"inspiración natural","bannerTexto":"Conoce nuestras almohadas con hierbas y semillas, telas de alta calidad y opciones de personalización según tu necesidad. Consulta por WhatsApp los detalles de cada producto.","chips":["Hierbas y semillas","Personalización","Envíos nacionales","Entrega estimada: 1 a 3 días"],"catalogoEtiqueta":"Encuentra tu almohada","catalogoTitulo":"Nuestra colección de bienestar","botonAgregar":"+ Agregar al carrito","beneficiosEtiqueta":"El cuidado está en los detalles","beneficiosTitulo":"Por qué elegir Dulce Natura","recomendadosEtiqueta":"Explora la colección","recomendadosTitulo":"Ideas para tu pausa natural","topEtiqueta":"Las favoritas de la comunidad","topTitulo":"Almohadas más votadas","dueloEtiqueta":"Elige tu favorita","dueloTitulo":"¿Cuál va contigo?","dueloInfo":"Toca la almohada que prefieras para sumar tu voto. Este ranking refleja preferencias, no recomendaciones terapéuticas.","testimoniosEtiqueta":"Experiencias compartidas","testimoniosTitulo":"Historias de nuestra comunidad","horariosEtiqueta":"Conversemos","horariosTitulo":"Horarios de atención","footerTexto":"Dulce Natura · Almohadas terapéuticas con hierbas y semillas. Desde Bogotá, con envíos a todo Colombia. Red informada: DULCENATURA.CO (plataforma por confirmar). Horarios: [POR COMPLETAR].","footerFrase":"Una pausa natural para ti.","carritoTitulo":"Tu selección de bienestar","botonPagar":"Consultar pedido por WhatsApp"},"productos":[{"id":"dn01","nombre":"Almohada multifuncional","precio":59900,"categoria":"Bienestar","imagen":"foto:7rcfxd","descripcion":"Almohada rellena de hierbas y semillas. Consulta sus medidas, cuidados y opciones de personalización.","opciones":null,"destacado":false},{"id":"dn02","nombre":"Almohada respiratoria","precio":52900,"categoria":"Bienestar","imagen":"foto:4uyzoc","descripcion":"Almohada rellena de hierbas y semillas. Consulta sus características e indicaciones de uso con el negocio.","opciones":null,"destacado":false},{"id":"dn03","nombre":"Almohada mano","precio":79900,"categoria":"Bienestar","imagen":"foto:s9ypo6","descripcion":"Almohada rellena de hierbas y semillas. Consulta sus medidas, cuidados y opciones de personalización.","opciones":null,"destacado":false},{"id":"dn04","nombre":"Almohada pélvica","precio":59900,"categoria":"Bienestar","imagen":"foto:wjp3dl","descripcion":"Almohada rellena de hierbas y semillas. Consulta sus características e indicaciones de uso con el negocio.","opciones":null,"destacado":false},{"id":"dn05","nombre":"Almohada cuello","precio":78900,"categoria":"Bienestar","imagen":"foto:umgzsg","descripcion":"Almohada rellena de hierbas y semillas. Consulta sus medidas, cuidados y opciones de personalización.","opciones":null,"destacado":false},{"id":"dn06","nombre":"Almohada rodilla","precio":58900,"categoria":"Bienestar","imagen":"foto:4726ta","descripcion":"Almohada rellena de hierbas y semillas. Consulta sus medidas, cuidados y opciones de personalización.","opciones":null,"destacado":false},{"id":"dn07","nombre":"Almohada ocular","precio":41900,"categoria":"Bienestar","imagen":"foto:4tnybu","descripcion":"Almohada rellena de hierbas y semillas. Consulta sus características e indicaciones de uso con el negocio.","opciones":null,"destacado":false},{"id":"dn08","nombre":"Almohada cervical","precio":99900,"categoria":"Bienestar","imagen":"foto:74pc6j","descripcion":"Almohada rellena de hierbas y semillas. Consulta sus medidas, cuidados y opciones de personalización.","opciones":null,"destacado":false},{"id":"dn09","nombre":"Almohada lumbar","precio":99900,"categoria":"Bienestar","imagen":"foto:y3kzm8","descripcion":"Almohada rellena de hierbas y semillas. Consulta sus medidas, cuidados y opciones de personalización.","opciones":null,"destacado":false},{"id":"dn10","nombre":"Almohada facial","precio":31900,"categoria":"Bienestar","imagen":"foto:f0aom9","descripcion":"Almohada rellena de hierbas y semillas. Consulta sus características e indicaciones de uso con el negocio.","opciones":null,"destacado":false}],"beneficios":[{"icono":"🌿","titulo":"Calidad en cada detalle","texto":"Almohadas elaboradas con telas y semillas de alta calidad."},{"icono":"🧵","titulo":"Personalización para ti","texto":"Consulta opciones de personalización según tu necesidad de bienestar."},{"icono":"📦","titulo":"Llegamos a Colombia","texto":"Envíos nacionales con tiempo aproximado de entrega de 1 a 3 días. Consulta el costo según tu destino."},{"icono":"🤝","titulo":"Productos con garantía","texto":"Consulta por WhatsApp las condiciones y la cobertura de la garantía."}],"testimonios":[],"pagos":{"metodos":[{"nombre":"Tarjeta de crédito o débito","icono":"💳","tipo":"otro"},{"nombre":"Addi","icono":"🛍️","tipo":"otro"},{"nombre":"Bre-B","icono":"📲","tipo":"transferencia"}],"numeroTransferencia":"3025499922","titular":"[POR COMPLETAR]","contraentregaDetalle":"Disponibilidad por confirmar: el formato menciona Bogotá, pedido mínimo de $31.900 y costo adicional de envío, pero no marca si ofrece contraentrega. Forma de cobro, responsable y valor del envío: [POR COMPLETAR]."},"backend":{"url":"https://script.google.com/macros/s/AKfycbzFGbtaJ3H1OJA13zj5IPWtwD-psYmqKzExsGKpCs0eB3LVxOVdOAv0WQNbykDqVlUC/exec"},"asistente":{"activo":true,"nombre":"Natura","saludo":"¡Hola! Soy Natura 🌿 Te ayudo a conocer nuestras almohadas, precios y entregas. ¿Qué te gustaría explorar?"},"secciones":["banner","catalogo","beneficios","recomendados","top","duelo"],"personalizado":{"css":"","secciones":[]}}</script>
+<script type="application/json" id="harvys-rutas">{"dn01":"img/almohada-multifuncional-7rcfxd.jpg","dn02":"img/almohada-respiratoria-4uyzoc.jpg","dn03":"img/almohada-mano-s9ypo6.jpg","dn04":"img/almohada-pelvica-wjp3dl.jpg","dn05":"img/almohada-cuello-umgzsg.jpg","dn06":"img/almohada-rodilla-4726ta.jpg","dn07":"img/almohada-ocular-4tnybu.jpg","dn08":"img/almohada-cervical-74pc6j.jpg","dn09":"img/almohada-lumbar-y3kzm8.jpg","dn10":"img/almohada-facial-f0aom9.jpg"}</script>
+<script src="script.js"></script>
+</body>
+</html>
